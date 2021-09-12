@@ -1,0 +1,257 @@
+#breaker {
+    height: 5% !important;
+}
+
+#row3 {
+    color: #FFFFFF;
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    background: black;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    margin: 0px;
+    display: flex;
+    width: 100%;
+}
+
+#row3-1 {
+    position: relative;
+    z-index: -10;
+    background: black;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;;
+    justify-content: space-around;
+    column-gap: 50px;
+    row-gap: 30px;
+    padding: 0px 150px;
+    padding-bottom: 50px;
+    padding-left: 150px;
+}
+
+#presort {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    z-index: 10;
+    justify-content: center;
+    bottom: 200px;
+}
+
+.cntcrd {
+    background: #2E2E2E;
+    color: #FFFFFF;
+    width: 356.58px;
+    height: 90px;
+}
+
+#conti-head {
+    background: black;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 26px;
+    padding-top: 50px;
+    text-align: left;
+}
+
+#contin, #contit {
+    font-weight: 200;
+    font-size: 20px;
+    padding-top: 50px;
+    background: black;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+
+#contin, #contit {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+
+    overflow: hidden;
+}
+
+#contin:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 70%;
+    right: 70%;
+    bottom: 0;
+    background: #FFFFFF;
+    height: 2px;
+    -webkit-transition-property: left right;
+    transition-property: left right;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+#contin:hover:before {
+    left: 0;
+    right: 0;
+}
+
+#contit:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 70%;
+    right: 70%;
+    bottom: 0;
+    background: #FFFFFF;
+    height: 2px;
+    -webkit-transition-property: left right;
+    transition-property: left right;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+#contit:hover:before {
+    left: 0%;
+    right: 0%;
+}
+
+.arrow-up, .arrow-down {
+    height: 20px;
+    width: 53px;
+    padding: 0px 10px;
+}
+
+
+.cntt {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-wrap: wrap;
+}
+
+.cntt h3 {
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 23px;
+    color: #FFF461;
+}
+
+.cntt p {
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 33px;
+    color: #FFFFFF;
+
+}
+
+.cnt-cnt {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-wrap: wrap;
+}
+
+.cnt-cnt h5 {
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: left;
+}
+
+.cnt-cnt span {
+    padding-left: 110px;
+    text-align: right;
+}
+
+.cnt-icon {
+    padding-right: 10px;
+    width: 42px;
+}
+
+.cnt-cnt .cnt-icon {
+    width: 40px;
+}
+
+@media only screen and (max-width: 1000px) {
+    #row3-1 .col-3 {
+        width: 356.58px;
+        height: 90px;
+    }
+}
+
+@media only screen and (max-width: 860px) {
+    #conti-head {
+        width: 100%;
+        text-align: center;
+    }
+
+    #contin, #contit {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 460px) {
+    .bg-container {
+        width: 120%;
+    }
+}
+
+
+@media only screen and (min-width: 950px) {
+    #conti-head {
+        padding-left: 50px;
+    }
+
+    .cntcrd {
+        width: 356.58px;
+        height: 90px;
+    }
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1130px) {
+    #row3-1 {
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 100%;
+        column-gap: 15px;
+        padding: 0px 15px;
+        padding-bottom: 25px;
+    }
+
+    #r1c3-1 {
+        width: 100%;
+    }
+
+    #r1c3 {
+        width: 80% !important;
+    }
+
+}
+
+@media only screen and (max-width: 1000px) {
+    #row3-1 {
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 100%;
+        padding-left: 30px;
+        padding-right: 30px;
+        column-gap: 15px;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    #row3-1 {
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+@media only screen and (max-width: 645px) {
+    #row3-1 {
+        grid-template-columns: 1fr;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
