@@ -1,3 +1,5 @@
+/*  ----------    TOP Row JS     ----------  */
+
 let drpdown = $('#city-selecter');
 drpdown.empty();
 const url = '/js/data.json';
@@ -12,11 +14,15 @@ initselect().then(function () {
                 json_data[i] = resp[i];
                 json_data[i]['nextFiveHrs'] = tmjson[i];
             }
-            console.log(resp, json_data);
+            //console.log(resp, json_data);
         }, 5000);
     });
 });
 
+/**
+ * @desc Initialise Main JSON
+ * @return {Promise<void>}
+ */
 async function initselect() {
     const remurl = 'https://soliton.glitch.me/all-timezone-cities';
     const options = {method: 'GET'};
@@ -41,33 +47,18 @@ async function initselect() {
 
 }
 
-/*
-// Populate dropdown with list of Cities
-$.getJSON(url, function (data) {
-    let i = 1;
-    $.each(data, function (key, entry) {
-        var idd = String('#cop' + i);
-        drpdown.append($('<a></a>').attr({
-            'value': entry['cityName'],
-            'class': 'dloptions',
-            'id': idd
-        }).text(entry['cityName']));
-        i++;
-    })
-})
-    .done(function () {
-        alert('getJSON request succeeded!');
-    })
-    .fail(function (jqXHR, textStatus, errorThrown) {
-        alert('getJSON request failed! ' + textStatus);
-    })
-*/
-
-
+/**
+ * @desc Citygen() function Caller
+ * @return {Promise<void>}
+ */
 async function jsonupdate() {
     citygen()
 }
 
+/**
+ * @desc Initialise Sub JSONs for Main
+ * @return {PromiseConstructor}
+ */
 function citygen() {
     const remurl = 'https://soliton.glitch.me/all-timezone-cities';
     const options = {method: 'GET'};
@@ -77,10 +68,10 @@ function citygen() {
             var resp = JSON.parse(res)
             tjs = keychng(resp);
             json_data = tjs;
-            console.log(tjs);
+            //console.log(tjs);
         })
         .then(r => {
-            console.log(resp, json_data);
+            //console.log(resp, json_data);
             for (var i in resp) {
                 citytime(resp[i]['cityName']);
             }
@@ -90,6 +81,10 @@ function citygen() {
 
 }
 
+/**
+ * @desc Fetch time for cities
+ * @param cname {String} City Name
+ */
 function citytime(cname) {
     var options = {
         method: 'GET',
@@ -104,6 +99,11 @@ function citytime(cname) {
         .catch((error) => console.log('error', error));
 }
 
+/**
+ * @desc Fetch Next 5hrs for cities
+ * @param jsob {Object} Object from Citytime
+ * @param cname {String} City name
+ */
 function city5hrs(jsob, cname) {
     var myHeaders = new Headers({'Content-Type': 'application/json'});
     var raw = JSON.stringify({...jsob, hours: 5});
@@ -123,6 +123,11 @@ function city5hrs(jsob, cname) {
         .catch((error) => console.log('error', error));
 }
 
+/**
+ * @desc To change JSON keys
+ * @param json {JSON} JSON Object
+ * @return {*} Key changed JSON Oject
+ */
 function keychng(json) {
     Object.keys(json).forEach(function (key) {
         var cnm = (json[key]['cityName']).toLowerCase();
@@ -139,7 +144,6 @@ let litems = ulpar.getElementsByClassName("dloptions");
 let city_select = document.getElementById("filterer");
 let city_txt = document.getElementById("city-icon");
 
-
 city_select.onchange = function onctChange() {
     var i = city_select.selectedIndex;
     var tt = city_select.value;
@@ -148,19 +152,18 @@ city_select.onchange = function onctChange() {
     city_txt.click();
     curtime(tt);
 }
-
-/**
- * @desc Getting current time
- * @param {String} tt
- * @return {void} noresponse
- */
 var proto;
 
+/**
+ * @desc Row1 update caller
+ * @param tt {String} City Name
+ * @return {void}
+ */
 function curtime(tt) {
 
     for (var i in json_data) {
         if (tt.toLowerCase() === i) {
-            console.log('changed');
+            //console.log('changed');
             var tcity = json_data[i];
             row1_update(tcity, i);
             proto = new protocall(tcity, i);
@@ -172,8 +175,8 @@ function curtime(tt) {
 
 /**
  * @desc Updater for Row1
- * @param tcity
- * @param tname
+ * @param tcity {Object} Selected City Object
+ * @param tname {String} City Name
  */
 function row1_update(tcity, tname) {
     document.getElementById('city-icon').src = "img/city_icons/" + tname + ".svg";
@@ -189,8 +192,8 @@ function row1_update(tcity, tname) {
     var mymonth = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"][full_date.getMonth()];
 
-    console.log(cur_time_dt);
-    console.log(full_date);
+    //console.log(cur_time_dt);
+    //console.log(full_date);
     //console.log(full_date.getHours());
 
     document.getElementsByClassName('w-date')[0].innerHTML = ("0" + mydate).slice(-2) + " - " + mymonth + " - " + full_date.getFullYear();
@@ -227,6 +230,9 @@ function row1_update(tcity, tname) {
     }
 }
 
+/**
+ * @desc Base Prototype Class
+ */
 class myproto {
 
     constructor() {
@@ -235,7 +241,7 @@ class myproto {
     row1_5hrs() {
         let hr_tem = document.getElementsByClassName('wc-number');
         let tem_dt = this.tem_dt;
-        console.log(tem_dt);
+        //console.log(tem_dt);
         var temp = this.temp;
         hr_tem[0].innerHTML = temp[0] + temp[1].sup() + "🌡️";
         var tavg = 0;
@@ -301,6 +307,9 @@ class myproto {
     }
 }
 
+/**
+ * @desc Base Prototype Access
+ */
 class protocall extends myproto {
     constructor(tcity, i) {
         super();
@@ -313,6 +322,10 @@ class protocall extends myproto {
     }
 }
 
+/**
+ * @desc Show & Hide Overlay
+ * @param xo {Number} Selected overlay index
+ */
 function ovly_loop(xo) {
     var ov = document.getElementsByClassName('overlayers');
     for (i = 0; i < ov.length; i++) {
@@ -327,26 +340,35 @@ function ovly_loop(xo) {
 let hr_tem = document.getElementsByClassName('wc-number');
 let tm_tem = document.getElementsByClassName('wc-time');
 
+/**
+ * @desc Remove border for unselected
+ * @param ele {String} Element of Selected Hour
+ * @return {string} Index of Selected Hour
+ */
 function remborder(ele) {
-    //console.log(ele.innerHTML);
+    //console.log(typeof ele);
     var txy;
     for (var i = 0; i < tm_tem.length; i++) {
         if (tm_tem[i].innerHTML !== ele.innerHTML) {
             tm_tem[i].classList.remove('border', 'border-3', 'rounded-3', 'bdrbg');
         } else {
             txy = hr_tem[i].innerHTML;
-            console.log(txy);
+            //console.log(txy);
         }
     }
     return txy;
 }
 
+/**
+ * @desc Overlay Updater
+ * @param tcity {Object} Current City Object
+ */
 function overlay_upd(tcity) {
     var txy = tcity['temperature'];
 
     for (var i = 0; i < tm_tem.length; i++) {
         tm_tem[i].addEventListener('mousedown', function (e) {
-            console.log(e.target);
+            //console.log(e.target);
             e.target.classList.add('border', 'border-3', 'rounded-3', 'bdrbg');
             txy = remborder(e.target);
             bg_overlay(txy.replace("<sup>°C</sup>🌡️", ''));
@@ -357,6 +379,10 @@ function overlay_upd(tcity) {
     bg_overlay(txy);
 }
 
+/**
+ * @desc Overlay Styles Updater
+ * @param txy {String} Selected Temperature
+ */
 function bg_overlay(txy) {
     //console.log(txy);
     txy = (txy.replace(' °C', ''));
@@ -395,7 +421,7 @@ const d = new Date();
 initiator();
 
 /**
- * desc Page Initiator
+ * desc Page Initiator for Top Row
  */
 function initiator() {
     remborder('hi');

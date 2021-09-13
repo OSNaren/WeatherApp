@@ -1,15 +1,23 @@
+/*  ----------    BOTTOM Row JS     ----------  */
+
 var my_data;
 const r3 = document.getElementById("row3-1");
 const cnames = [];
 
+/**
+ * @desc Categorise Caller
+ */
 function fcll() {
     my_data = categorise(my_data);
-    console.log(my_data);
+    //console.log(my_data);
     Object.keys(my_data).forEach(function (key) {
         cnames.push(key);
     });
 }
 
+/**
+ * @desc Fetch JSON
+ */
 fetch(remurl, options)
     .then(async (res) => {
         res = (await res.text());
@@ -37,7 +45,10 @@ let conticrd = document.getElementsByClassName('cntcrd');
 let cntt = document.getElementsByClassName('cntt');
 let cntcnt = document.getElementsByClassName('cnt-cnt');
 
-
+/**
+ * @desc Update Bottom row Grid Cards
+ * @param x {Number} Number of Cards
+ */
 function row31_update(x) {
     for (var i = x; i < conticrd.length; i++) {
         var ccnm = cnames[i];
@@ -83,6 +94,10 @@ function row31_update(x) {
     }
 }
 
+/**
+ * @desc Hide cards after count
+ * @param i {Number} Count
+ */
 function postcnt(i) {
     var itm = conticrd[0];
 
@@ -127,6 +142,10 @@ cbtn.addEventListener('click', function (e) {
     makevisible();
 });
 
+/**
+ * @desc Sort Continent wise
+ * @param cfl {Boolean} Continent - Asc/Desc
+ */
 function cardCsort(cfl) {
     let toSort = Array.prototype.slice.call(conticrd, 0);
     toSort.sort((a, b) => {
@@ -149,6 +168,12 @@ function cardCsort(cfl) {
     }
 }
 
+/**
+ * @desc Continent wise Temperature
+ * @param cfl {Boolean} Continent - Asc/Desc
+ * @param toSort {Array} Continent wise sorted Array
+ * @return {*} {Array} Same continent sorted Array
+ */
 function cardCtemp(cfl, toSort) {
     toSort.sort((a, b) => {
         var tcx = a.childNodes[1].childNodes[1].innerHTML;
@@ -164,6 +189,10 @@ function cardCtemp(cfl, toSort) {
     return toSort;
 }
 
+/**
+ * @desc Sort Temperature wise
+ * @param tfl {Boolean} Temperature - Asc/Desc
+ */
 function cardTsort(tfl) {
     let toSort = Array.prototype.slice.call(conticrd, 0);
     toSort.sort((a, b) => {
@@ -211,6 +240,9 @@ tbtn.addEventListener('click', function (e) {
     makevisible();
 });
 
+/**
+ * @desc Show & Hide Cards
+ */
 function makevisible() {
     for (var i = 0; i < cnames.length; i++) {
         if (i < 12) {
@@ -223,6 +255,9 @@ function makevisible() {
 
 r3ini();
 
+/**
+ * @desc Page initialise - Bottom Row
+ */
 function r3ini() {
     var fch = presort.childNodes[1];
     var spns = fch.children;

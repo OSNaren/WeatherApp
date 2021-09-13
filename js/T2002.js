@@ -1,3 +1,5 @@
+/*  ----------    MIDDLE Row JS     ----------  */
+
 let top3_icons = document.getElementsByClassName('wtop-icons');
 let loadercnt = document.getElementById('ldcont');
 var my_json;
@@ -7,26 +9,36 @@ let catv = [0, 0, 0];
 const remurl = 'https://soliton.glitch.me/all-timezone-cities';
 let options = {method: 'GET'};
 
-
+/**
+ * @desc Caller for Categorising
+ */
 function funcall() {
     my_json = categorise(my_json);
     cat1 = sortObject(cat1, 'temperature');
     cat2 = sortObject(cat2, 'precipitation');
     cat3 = sortObject(cat3, 'humidity');
-    console.log(my_json);
+    //console.log(my_json);
 }
 
+/**
+ * @desc Fetch Main JSON
+ */
 fetch(remurl, options)
     .then(async (res) => {
         res = (await res.text());
         var resp = JSON.parse(res)
         my_json = keychng(resp);
-        console.log(my_json);
+        //console.log(my_json);
         funcall();
     })
     .catch((err) => console.error(err));
 
-
+/**
+ * @desc JSON Object Sorter
+ * @param obj {Object} JSON Object
+ * @param ct {String} Category Specifier
+ * @return {*[]} Sorted Object
+ */
 const sortObject = function (obj, ct) {
     const arr = Object.keys(obj).map(el => {
         return obj[el];
@@ -46,6 +58,11 @@ const sortObject = function (obj, ct) {
     return arr;
 };
 
+/**
+ * @desc To Categorise JSON
+ * @param jsdt {JSON} JSON Object
+ * @return {*} Categorised JSON Object
+ */
 function categorise(jsdt) {
     Object.keys(jsdt).forEach(function (key) {
         const value = jsdt[key];
@@ -76,6 +93,11 @@ function categorise(jsdt) {
     return jsdt;
 }
 
+/**
+ * @desc Line Style Remover
+ * @param ele {Element} Selected Category
+ * @return {string} Index of Selected Category
+ */
 function remuline(ele) {
     //console.log(ele.innerHTML);
     var txy;
@@ -99,7 +121,7 @@ for (var i = 0; i < top3_icons.length; i++) {
         tar.classList.add('uline');
         //console.log(tar);
         var txy = remuline(tar);
-        console.log('txy', txy);
+        //console.log('txy', txy);
         dis_cards(Number(txy));
         cont_sli.scrollBy(-1250, 0);
         setTimeout(chgvisible, 1000, true);
@@ -113,6 +135,10 @@ for (var i = 0; i < top3_icons.length; i++) {
     });
 }
 
+/**
+ * @desc Change Visibility of Loader & Content
+ * @param bl {Boolean} To Show & Hide
+ */
 function chgvisible(bl) {
     if (bl) {
         $('#ldcont').show().delay(2000).fadeOut(400);
@@ -136,6 +162,10 @@ function chgvisible(bl) {
 let cont_sli = document.getElementById('r-slider');
 let ctcls = document.getElementsByClassName('ctcrd');
 
+/**
+ * @desc Display cards of Selected Category
+ * @param cate {Number} Index of Selected Category
+ */
 function dis_cards(cate) {
     //console.log('discards', 1);
     var ctlen = ctcls.length;
@@ -174,17 +204,23 @@ function dis_cards(cate) {
             //console.log(i);
         }
     }
-    console.log('CT', ctcls.length, scat);
+    //console.log('CT', ctcls.length, scat);
     card_edit(ctcls.length, scat, sic);
 }
 
+/**
+ * @desc Update Displayed Cards
+ * @param ctlen {Number} Number of cards
+ * @param scat {Object} Category Object
+ * @param sic {String} Src for Card Icon
+ */
 function card_edit(ctlen, scat, sic) {
-    console.log(scat[0]['cityName']);
+    //console.log(scat[0]['cityName']);
     var ctt = document.getElementsByClassName('ctt');
     var cic = cont_sli.getElementsByClassName('temcic');
     var cnt = cont_sli.getElementsByClassName('ct-cnt');
     var ctim = cont_sli.getElementsByClassName('top-ctimg');
-    console.log(scat[0]['category']);
+    //console.log(scat[0]['category']);
     for (var i = 0; i < ctlen; i++) {
         ctt[i].childNodes[1].innerHTML = scat[i]['cityName'];
         var xtem = scat[i]['temperature'];
@@ -239,7 +275,10 @@ function card_edit(ctlen, scat, sic) {
 var rar = document.getElementById('rarr');
 var lar = document.getElementById('larr');
 
-
+/**
+ * @desc Check Overflow of Card Container
+ * @param el {Element}
+ */
 function checkflow(el) {
     el = document.getElementById('r-slider');
     var curOverf = el.style.overflowX;
@@ -270,7 +309,7 @@ lar.addEventListener('click', function (e) {
 $('#wtop-num').change(function (e) {
     var ctcls = document.getElementsByClassName('ctcrd');
     var vi = (e.target.value);
-    console.log('cnt', vi);
+    //console.log('cnt', vi);
     for (var i = 0; i < vi; i++) {
         ctcls[i].style.display = '';
     }
@@ -282,6 +321,9 @@ $('#wtop-num').change(function (e) {
 
 row2_initiator();
 
+/**
+ * @desc Page Initialise - Middle Row
+ */
 function row2_initiator() {
     checkflow(cont_sli);
     var ctcls = document.getElementsByClassName('ctcrd');
@@ -328,8 +370,11 @@ $('#r2ini').mouseenter(function (e) {
     tcty.classList.remove('headline', 'headline--fall');
 });
 
+/**
+ * @desc Time Update for Card Cities
+ */
 function dosecs2() {
-    console.log(my_json);
+    //console.log(my_json);
     setInterval(function () {
         var ctt = document.getElementsByClassName('ctt');
         var cic = cont_sli.getElementsByClassName('temcic');

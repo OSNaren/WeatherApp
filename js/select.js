@@ -1,3 +1,5 @@
+/*  ----------    TOP Row - Select City JS     ----------  */
+
 let inputField;
 let dropdown;
 let dropdownArray;
@@ -6,7 +8,9 @@ let liitems;
 var nodes;
 var selected;
 let valueArray = [];
-
+/**
+ * @desc Initialise for dropdown
+ */
 setTimeout(function () {
     inputField = document.querySelector('.chosen-value');
     dropdown = document.querySelector('.value-list');
@@ -30,12 +34,15 @@ setTimeout(function () {
     dropdownArray.forEach(item => {
         valueArray.push(item.textContent);
     });
-    console.log(valueArray);
+    //console.log(valueArray);
     nodes = document.querySelectorAll('a');
     selected = 0;
     selectAllfn();
 }, 7000);
 
+/**
+ * @desc Add all Event listeners
+ */
 function selectAllfn() {
     const closeDropdown = () => {
         dropdown.classList.remove('open');
@@ -124,10 +131,15 @@ city_select.ondblclick = function (evt) {
 $('form').submit(function (e) {
     e.preventDefault();
     let inval = city_select.value;
-    console.log(inval);
+    //console.log(inval);
     return false;
 });
 
+/**
+ * @desc Find index of selected item
+ * @param item {Element} Selected element
+ * @return {number} Index of Selected item
+ */
 function indexli(item) {
     var xid = item.getAttribute('id');
     //console.log(xid);
@@ -148,6 +160,9 @@ let div = document.getElementById("city-selecter");
 let a = div.getElementsByTagName("a");
 let flvi = 0;
 
+/**
+ * @desc Filter Dropdown when typing
+ */
 function filterFunction() {
     var input, filter, ul, li, i;
     input = document.getElementById("filterer");
@@ -166,10 +181,24 @@ function filterFunction() {
     }
 }
 
-
+/**
+ * @desc Remove style for element
+ * @param ele {Element}
+ */
 function remhovercss(ele) {
     if (ele !== undefined) {
         ele.removeAttribute('style');
+    }
+}
+
+/**
+ * @desc Add style for element
+ * @param ele
+ */
+function addhovercss(ele) {
+    if (ele !== undefined) {
+        ele.setAttribute('style', 'transition: all 0.5s ease-in;');
+        ele.setAttribute('style', 'background-color: #d2d0d0;font-style: italic;justify-content: space-between;');
     }
 }
 
@@ -179,6 +208,11 @@ document.getElementById('alcloser').addEventListener('click', function (e) {
 
 let salert = document.getElementById('searchal');
 
+/**
+ * @desc To check element present
+ * @param it {Element} Element to be checked
+ * @return {boolean} Present or Not
+ */
 function checkli(it) {
     for (var i = 0; i < liitems.length; i++) {
         if (it === liitems[i].textContent) {
@@ -189,6 +223,11 @@ function checkli(it) {
     return false;
 }
 
+/**
+ * @desc To remove classnames of element
+ * @param el {Element}
+ * @param className {String} Classname to be removed
+ */
 function removeClass(el, className) {
     if (el.classList) {
         el.classList.remove(className);
@@ -197,6 +236,11 @@ function removeClass(el, className) {
     }
 }
 
+/**
+ * @desc To add classnames of element
+ * @param el {Element}
+ * @param className {String} Classname to be added
+ */
 function addClass(el, className) {
     if (el.classList) {
         el.classList.add(className);
@@ -209,21 +253,6 @@ var ull = document.querySelector('ul');
 var ul = document.getElementById('city-selecter');
 var liSelected;
 var index = -1;
-/*
-function jumpvisible(next) {
-    if (next.style.display === 'none') {
-        var ind = indexli(next);
-        for (var i = ind; i < liitems.length; i++) {
-            if (liitems[i].style.display !== 'none') {
-                index = i;
-                selected = i;
-                liSelected = liitems[i];
-            }
-        }
-    }
-
-}
-*/
 
 document.addEventListener('keydown', function (event) {
     var len = ul.getElementsByTagName('a').length - 1;
@@ -302,7 +331,10 @@ document.addEventListener('keydown', function (e) {
 
 });
 
-
+/**
+ * @desc After selecting city call
+ * @param el {Element} Selected city element
+ */
 function inselect(el) {
     //console.log(el);
     var ic = inputField.placeholder;
@@ -323,6 +355,10 @@ function inselect(el) {
     //console.log(inputField.value);
 }
 
+/**
+ * @desc Scroll management for Dropdown
+ * @param el {Element} Current traversing element
+ */
 function select(el) {
     var s;
     s = indexli(el);
@@ -352,13 +388,6 @@ function select(el) {
     if (document.querySelector('a.selected') != null)
         document.querySelector('a.selected').classList.remove('selected');
     el.classList.add('selected');
-}
-
-function addhovercss(ele) {
-    if (ele !== undefined) {
-        ele.setAttribute('style', 'transition: all 0.5s ease-in;');
-        ele.setAttribute('style', 'background-color: #d2d0d0;font-style: italic;justify-content: space-between;');
-    }
 }
 
 ull.onscroll = function () {
