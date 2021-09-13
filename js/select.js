@@ -14,7 +14,7 @@ setTimeout(function () {
     for (var i = 1; i <= liitems.length; i++) {
         var idd = String('#cop' + i);
         var key = liitems[i - 1].getAttribute('value');
-        var srcc = String("/img/city_icons/" + key + ".svg");
+        var srcc = String("img/city_icons/" + key + ".svg");
         var iht = document.getElementById(idd);
         iht.innerHTML = '<img class="c-icon" alt="Cicon">' + iht.innerHTML;
         iht.firstChild.src = srcc;
