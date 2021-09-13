@@ -34,7 +34,7 @@ setTimeout(function () {
     nodes = document.querySelectorAll('a');
     selected = 0;
     selectAllfn();
-}, 4000);
+}, 7000);
 
 function selectAllfn() {
     const closeDropdown = () => {
