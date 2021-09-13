@@ -3,6 +3,7 @@ drpdown.empty();
 const url = '/js/data.json';
 
 let tmjson = {};
+var resp;
 initselct();
 
 function initselct() {
@@ -12,10 +13,10 @@ function initselct() {
     fetch(remurl, options)
         .then(async (res) => {
             res = (await res.text());
-            var resp = JSON.parse(res)
+            resp = JSON.parse(res)
             resp = keychng(resp);
             for (var i in resp) {
-                console.log(i);
+                //console.log(i);
                 var idd = String('#cop' + j);
                 drpdown.append($('<a></a>').attr({
                     'value': resp[i]['cityName'],
@@ -55,19 +56,17 @@ var json_data, tjs;
 
 function jsonupdate() {
     citygen();
+    json_data = resp;
+    for (var i in resp) {
+        citytime(resp[i]['cityName']);
+    }
 
-    $.getJSON(url, 'data', function (data) {
-        json_data = data;
-        for (var i in data) {
-            citytime(data[i]['cityName']);
-        }
-    });
     setTimeout(function () {
         for (var i in json_data) {
-            json_data[i] = tjs[i];
+            json_data[i] = resp[i];
             json_data[i]['nextFiveHrs'] = tmjson[i];
         }
-        console.log(json_data);
+        console.log(resp, my_json);
     }, 4000);
 }
 
@@ -351,10 +350,10 @@ function overlay_upd(tcity) {
 }
 
 function bg_overlay(txy) {
-    console.log(txy);
+    //console.log(txy);
     txy = (txy.replace(' °C', ''));
     txy = Number(txy.replace('°C', ''));
-    console.log(txy);
+    //console.log(txy);
     switch (true) {
         case txy === 666:
             ovly_loop(txy);
