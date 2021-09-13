@@ -3,10 +3,21 @@ drpdown.empty();
 const url = '/js/data.json';
 
 let tmjson = {};
-var resp;
-initselct();
+var resp, json_data, tjs;
+initselect().then(function () {
+    jsonupdate().then(r => {
+        setTimeout(function () {
+            for (var i in json_data) {
+                //console.log(i);
+                json_data[i] = resp[i];
+                json_data[i]['nextFiveHrs'] = tmjson[i];
+            }
+            console.log(resp, json_data);
+        }, 5000);
+    });
+});
 
-function initselct() {
+async function initselect() {
     const remurl = 'https://soliton.glitch.me/all-timezone-cities';
     const options = {method: 'GET'};
     var j = 1;
@@ -27,6 +38,7 @@ function initselct() {
             }
         })
         .catch((err) => console.error(err));
+
 }
 
 /*
@@ -51,23 +63,9 @@ $.getJSON(url, function (data) {
     })
 */
 
-jsonupdate();
-var json_data, tjs;
 
-function jsonupdate() {
-    citygen();
-    json_data = resp;
-    for (var i in resp) {
-        citytime(resp[i]['cityName']);
-    }
-
-    setTimeout(function () {
-        for (var i in json_data) {
-            json_data[i] = resp[i];
-            json_data[i]['nextFiveHrs'] = tmjson[i];
-        }
-        console.log(resp, my_json);
-    }, 4000);
+async function jsonupdate() {
+    citygen()
 }
 
 function citygen() {
@@ -78,9 +76,18 @@ function citygen() {
             res = (await res.text());
             var resp = JSON.parse(res)
             tjs = keychng(resp);
+            json_data = tjs;
             console.log(tjs);
         })
+        .then(r => {
+            console.log(resp, json_data);
+            for (var i in resp) {
+                citytime(resp[i]['cityName']);
+            }
+        })
         .catch((err) => console.error(err));
+    return Promise;
+
 }
 
 function citytime(cname) {
@@ -110,6 +117,7 @@ function city5hrs(jsob, cname) {
     fetch('https://soliton.glitch.me/hourly-forecast', options)
         .then(async (response) => response.text())
         .then((res) => {
+            //console.log(JSON.parse(res));
             tmjson[cname.toLowerCase()] = JSON.parse(res)['temperature'];
         })
         .catch((error) => console.log('error', error));
@@ -138,7 +146,6 @@ city_select.onchange = function onctChange() {
     city_select.blur();
     city_txt.focus();
     city_txt.click();
-    var w_values = new Array(4);
     curtime(tt);
 }
 
@@ -153,6 +160,7 @@ function curtime(tt) {
 
     for (var i in json_data) {
         if (tt.toLowerCase() === i) {
+            console.log('changed');
             var tcity = json_data[i];
             row1_update(tcity, i);
             proto = new protocall(tcity, i);

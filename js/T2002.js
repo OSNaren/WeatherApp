@@ -21,6 +21,7 @@ fetch(remurl, options)
         res = (await res.text());
         var resp = JSON.parse(res)
         my_json = keychng(resp);
+        console.log(my_json);
         funcall();
     })
     .catch((err) => console.error(err));
@@ -100,6 +101,7 @@ for (var i = 0; i < top3_icons.length; i++) {
         var txy = remuline(tar);
         console.log('txy', txy);
         dis_cards(Number(txy));
+        cont_sli.scrollBy(-1250, 0);
         setTimeout(chgvisible, 1000, true);
         setTimeout(function () {
             checkflow(cont_sli);
@@ -206,8 +208,8 @@ function card_edit(ctlen, scat, sic) {
         }));
         dat = (dat.replace(',', '').split(' '));
         cnt[i].childNodes[3].innerHTML = dat[1] + '-' + dat[0] + '-' + dat[2];
-        cnt[i].childNodes[5].innerHTML = '<img class="card-icon humcic" alt=""> ' + scat[i]['humidity'];
-        cnt[i].childNodes[7].innerHTML = '<img class="card-icon precic" alt=""> ' + scat[i]['precipitation'];
+        cnt[i].childNodes[5].innerHTML = '<img class="card-icon humcic" src="img/weather_icons/humidityIcon.svg" alt=""> ' + scat[i]['humidity'];
+        cnt[i].childNodes[7].innerHTML = '<img class="card-icon precic" src="img/weather_icons/precipitationIcon.svg" alt=""> ' + scat[i]['precipitation'];
 
         var wnum = document.getElementById('wtop-num');
         if (scat[0]['category'] === 2) {
@@ -290,7 +292,9 @@ function row2_initiator() {
     swr.style.display = '';
     cont_sli.style.overflowX = 'hidden';
     cont_sli.style.overflowY = 'hidden';
-    //document.getElementById('r-slider').pointerEvents = 'none';
+    setTimeout(function () {
+        $('#wtop-sun').trigger('click');
+    }, 3000);
 }
 
 var disbtn = document.getElementById('r2ini');
@@ -331,10 +335,11 @@ function dosecs2() {
         var cic = cont_sli.getElementsByClassName('temcic');
         var cnt = cont_sli.getElementsByClassName('ct-cnt');
 
-        for (var i = 0; i < ctcls.length / 2; i++) {
+        for (var i = 0; i < ctcls.length; i++) {
             var cname = (ctt[i].childNodes[1].innerHTML).toLowerCase();
             //console.log(cname);
             var tzone = my_json[cname]['timeZone'];
+            //console.log(tzone);
             cnt[i].childNodes[1].innerHTML = (new Date().toLocaleString("en-US", {
                 timeZone: "" + tzone,
                 hour: '2-digit',

@@ -1,16 +1,23 @@
-const inputField = document.querySelector('.chosen-value');
-const dropdown = document.querySelector('.value-list');
-const dropdownArray = [...document.querySelectorAll("a")];
-let parul = document.getElementById('city-selecter');
-let liitems = parul.getElementsByClassName("dloptions");
-setTimeout(function () {
+let inputField;
+let dropdown;
+let dropdownArray;
+let parul;
+let liitems;
+var nodes;
+var selected;
+let valueArray = [];
 
-    //console.log(liitems)
+setTimeout(function () {
+    inputField = document.querySelector('.chosen-value');
+    dropdown = document.querySelector('.value-list');
+    dropdownArray = [...document.querySelectorAll("a")];
+
     dropdown.classList.remove('open');
     inputField.placeholder = 'Select City';
     inputField.value = '';
-    let valueArray = [];
 
+    parul = document.getElementById('city-selecter');
+    liitems = parul.getElementsByClassName("dloptions");
     for (var i = 1; i <= liitems.length; i++) {
         var idd = String('#cop' + i);
         var key = (liitems[i - 1].getAttribute('value')).toLowerCase();
@@ -18,71 +25,124 @@ setTimeout(function () {
         var iht = document.getElementById(idd);
         iht.innerHTML = '<img class="c-icon" alt="Cicon">' + iht.innerHTML;
         iht.firstChild.src = srcc;
-
     }
 
     dropdownArray.forEach(item => {
         valueArray.push(item.textContent);
     });
     console.log(valueArray);
+    nodes = document.querySelectorAll('a');
+    selected = 0;
+    selectAllfn();
+}, 4000);
 
+function selectAllfn() {
     const closeDropdown = () => {
         dropdown.classList.remove('open');
     }
-}, 3000);
-
-inputField.addEventListener('input', () => {
-    dropdown.classList.add('open');
-    filterFunction();
-    let inputValue = inputField.value.toLowerCase();
-});
 
 
-dropdownArray.forEach(item => {
-    item.addEventListener('click', (evt) => {
-        inputField.value = item.textContent;
-        inputField.placeholder = item.textContent;
+    inputField.addEventListener('input', () => {
+        dropdown.classList.add('open');
+        filterFunction();
+        let inputValue = inputField.value.toLowerCase();
+    });
+
+
+    dropdownArray.forEach(item => {
+        item.addEventListener('click', (evt) => {
+            inputField.value = item.textContent;
+            inputField.placeholder = item.textContent;
+            dropdownArray.forEach(dropdown => {
+                dropdown.classList.add('closed');
+            });
+        });
+    })
+
+    inputField.addEventListener('hover', () => {
+        dropdown.classList.add('open');
         dropdownArray.forEach(dropdown => {
-            dropdown.classList.add('closed');
+            dropdown.classList.remove('closed');
         });
     });
-})
 
-inputField.addEventListener('hover', () => {
-    dropdown.classList.add('open');
-    dropdownArray.forEach(dropdown => {
-        dropdown.classList.remove('closed');
+    inputField.addEventListener('focus', () => {
+        if (inputField.value === '') {
+        }
+        inputField.placeholder = 'Search...';
+        dropdown.classList.add('open');
+        dropdownArray.forEach(dropdown => {
+            dropdown.classList.remove('closed');
+        });
     });
-});
 
-inputField.addEventListener('focus', () => {
-    if (inputField.value === '') {
-    }
-    inputField.placeholder = 'Search...';
-    dropdown.classList.add('open');
-    dropdownArray.forEach(dropdown => {
-        dropdown.classList.remove('closed');
-    });
-});
-
-inputField.addEventListener('blur', () => {
-    inputField.placeholder = 'Select City';
-    dropdown.classList.remove('open');
-});
-
-document.addEventListener('click', (evt) => {
-    const isDropdown = dropdown.contains(evt.target);
-    const isInput = inputField.contains(evt.target);
-    if (!isDropdown && !isInput) {
+    inputField.addEventListener('blur', () => {
+        inputField.placeholder = 'Select City';
         dropdown.classList.remove('open');
-        if (liSelected !== undefined) {
-            var parnm = liSelected.parentElement.nodeName;
-            remhovercss(liSelected);
+    });
+
+    document.addEventListener('click', (evt) => {
+        const isDropdown = dropdown.contains(evt.target);
+        const isInput = inputField.contains(evt.target);
+        if (!isDropdown && !isInput) {
+            dropdown.classList.remove('open');
+            if (liSelected !== undefined) {
+                var parnm = liSelected.parentElement.nodeName;
+                remhovercss(liSelected);
+            }
+        }
+
+    });
+
+    dropdownArray.forEach(item => {
+        item.addEventListener('mousedown', (evt) => {
+            inputField.value = item.textContent;
+            inputField.placeholder = item.textContent;
+            selected = index = indexli(item);
+            //index--;
+            selected++;
+            liSelected = item;
+            //console.log('S : ', selected, 'Nodes len : ', nodes.length);
+            $("#filterer").trigger("change");
+            $("#alcloser").trigger("click");
+            dropdownArray.forEach(dropdown => {
+                dropdown.classList.add('closed');
+            });
+        });
+    });
+}
+
+city_select.ondblclick = function (evt) {
+    this.value = '';
+    this.blur();
+    filterFunction();
+    initiator();
+    selected = index = 0;
+    //document.getElementById('city-icon').src = 'img/gifs/sunglass.gif';
+}
+
+$('form').submit(function (e) {
+    e.preventDefault();
+    let inval = city_select.value;
+    console.log(inval);
+    return false;
+});
+
+function indexli(item) {
+    var xid = item.getAttribute('id');
+    //console.log(xid);
+    var child = document.getElementById(xid);
+    var parent = child.parentNode;
+// The equivalent of parent.children.indexOf(child)
+    var index = Array.prototype.indexOf.call(parent.children, child);
+
+    for (var i = 0; i < liitems.length; i++) {
+        if (item.textContent === liitems[i].textContent) {
+            return i;
         }
     }
-
-});
-
+    return -1;
+}
 
 let div = document.getElementById("city-selecter");
 let a = div.getElementsByTagName("a");
@@ -107,58 +167,49 @@ function filterFunction() {
 }
 
 
-city_select.ondblclick = function (evt) {
-    this.value = '';
-    this.blur();
-    filterFunction();
-    initiator();
-    selected = index = 0;
-    //document.getElementById('city-icon').src = 'img/gifs/sunglass.gif';
+function remhovercss(ele) {
+    if (ele !== undefined) {
+        ele.removeAttribute('style');
+    }
 }
-$('form').submit(function (e) {
-    e.preventDefault();
-    let inval = city_select.value;
-    console.log(inval);
-    return false;
+
+document.getElementById('alcloser').addEventListener('click', function (e) {
+    salert.style.display = 'none';
 });
 
-function indexli(item) {
-    var xid = item.getAttribute('id');
-    //console.log(xid);
-    var child = document.getElementById(xid);
-    var parent = child.parentNode;
-// The equivalent of parent.children.indexOf(child)
-    var index = Array.prototype.indexOf.call(parent.children, child);
+let salert = document.getElementById('searchal');
 
+function checkli(it) {
     for (var i = 0; i < liitems.length; i++) {
-        if (item.textContent === liitems[i].textContent) {
-            return i;
+        if (it === liitems[i].textContent) {
+            //console.log(liitems[i].textContent);
+            return true;
         }
     }
-    return -1;
+    return false;
 }
 
-dropdownArray.forEach(item => {
-    item.addEventListener('mousedown', (evt) => {
-        inputField.value = item.textContent;
-        inputField.placeholder = item.textContent;
-        selected = index = indexli(item);
-        //index--;
-        selected++;
-        liSelected = item;
-        //console.log('S : ', selected, 'Nodes len : ', nodes.length);
-        $("#filterer").trigger("change");
-        $("#alcloser").trigger("click");
-        dropdownArray.forEach(dropdown => {
-            dropdown.classList.add('closed');
-        });
-    });
-})
+function removeClass(el, className) {
+    if (el.classList) {
+        el.classList.remove(className);
+    } else {
+        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    }
+}
 
+function addClass(el, className) {
+    if (el.classList) {
+        el.classList.add(className);
+    } else {
+        el.className += ' ' + className;
+    }
+}
+
+var ull = document.querySelector('ul');
 var ul = document.getElementById('city-selecter');
 var liSelected;
 var index = -1;
-
+/*
 function jumpvisible(next) {
     if (next.style.display === 'none') {
         var ind = indexli(next);
@@ -172,6 +223,7 @@ function jumpvisible(next) {
     }
 
 }
+*/
 
 document.addEventListener('keydown', function (event) {
     var len = ul.getElementsByTagName('a').length - 1;
@@ -184,7 +236,7 @@ document.addEventListener('keydown', function (event) {
             removeClass(liSelected, 'selected');
             remhovercss(liSelected);
             next = ul.getElementsByTagName('a')[index];
-            jumpvisible(next);
+            //jumpvisible(next);
             //console.log(next);
             if (index <= len) {
                 liSelected = next;
@@ -230,25 +282,6 @@ document.addEventListener('keydown', function (event) {
     }
 }, false);
 
-function removeClass(el, className) {
-    if (el.classList) {
-        el.classList.remove(className);
-    } else {
-        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-    }
-}
-
-function addClass(el, className) {
-    if (el.classList) {
-        el.classList.add(className);
-    } else {
-        el.className += ' ' + className;
-    }
-}
-
-var ull = document.querySelector('ul');
-var nodes = document.querySelectorAll('a');
-var selected = 0;
 
 document.addEventListener('keydown', function (e) {
     if (e.keyCode === 38) { // up
@@ -268,17 +301,7 @@ document.addEventListener('keydown', function (e) {
     }
 
 });
-let salert = document.getElementById('searchal');
 
-function checkli(it) {
-    for (var i = 0; i < liitems.length; i++) {
-        if (it === liitems[i].textContent) {
-            //console.log(liitems[i].textContent);
-            return true;
-        }
-    }
-    return false;
-}
 
 function inselect(el) {
     //console.log(el);
@@ -301,7 +324,7 @@ function inselect(el) {
 }
 
 function select(el) {
-    var s = [].indexOf.call(nodes, el);
+    var s;
     s = indexli(el);
     if (s > 0) {
         inputField.value = liitems[s - 1].textContent;
@@ -337,16 +360,6 @@ function addhovercss(ele) {
         ele.setAttribute('style', 'background-color: #d2d0d0;font-style: italic;justify-content: space-between;');
     }
 }
-
-function remhovercss(ele) {
-    if (ele !== undefined) {
-        ele.removeAttribute('style');
-    }
-}
-
-document.getElementById('alcloser').addEventListener('click', function (e) {
-    salert.style.display = 'none';
-});
 
 ull.onscroll = function () {
     //var elHeight = $(el).height();
