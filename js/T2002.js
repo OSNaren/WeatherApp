@@ -1,49 +1,29 @@
 let top3_icons = document.getElementsByClassName('wtop-icons');
 let loadercnt = document.getElementById('ldcont');
-export var my_json;
+var my_json;
 let cat1 = {}, cat2 = {}, cat3 = {};
 let catv = [0, 0, 0];
 
 const remurl = 'https://soliton.glitch.me/all-timezone-cities';
 let options = {method: 'GET'};
 
-function keychng(json) {
-    Object.keys(json).forEach(function (key) {
-        var cnm = (json[key]['cityName']).toLowerCase();
-        json[cnm] = json[key];
-        delete json[key];
-    });
-    //console.log(json);
-    return json;
-}
 
-function funcall(my_json) {
-    console.log(my_json);
+function funcall() {
     my_json = categorise(my_json);
     cat1 = sortObject(cat1, 'temperature');
     cat2 = sortObject(cat2, 'precipitation');
     cat3 = sortObject(cat3, 'humidity');
+    console.log(my_json);
 }
 
 fetch(remurl, options)
     .then(async (res) => {
         res = (await res.text());
-        res = JSON.parse(res)
-        my_json = await keychng(res);
+        var resp = JSON.parse(res)
+        my_json = keychng(resp);
+        funcall();
     })
     .catch((err) => console.error(err));
-
-/*$.getJSON('js/data.json', function (data) {
-
-    my_json = data;
-    categorise();
-    console.log(my_json);
-
-    cat1 = sortObject(cat1, 'temperature');
-    cat2 = sortObject(cat2, 'precipitation');
-    cat3 = sortObject(cat3, 'humidity');
-    //global my_json = my_json;
-});*/
 
 
 const sortObject = function (obj, ct) {
@@ -65,9 +45,9 @@ const sortObject = function (obj, ct) {
     return arr;
 };
 
-export function categorise(my_json) {
-    Object.keys(my_json).forEach(function (key) {
-        const value = my_json[key];
+function categorise(jsdt) {
+    Object.keys(jsdt).forEach(function (key) {
+        const value = jsdt[key];
         //console.log(value);
 
         var tem = Number(value['temperature'].replace('°C', ''));
@@ -89,10 +69,10 @@ export function categorise(my_json) {
             cat3[key] = value;
             catv[2]++;
         }
-        console.log(value, value['category']);
+        //console.log(value, value['category']);
     });
-    //console.log(my_json);
-    return my_json;
+    //console.log(catv);
+    return jsdt;
 }
 
 function remuline(ele) {
@@ -103,7 +83,6 @@ function remuline(ele) {
             top3_icons[i].classList.remove('uline');
         } else {
             txy = ele.getAttribute('value');
-            console.log(txy);
         }
     }
     return txy;
@@ -128,6 +107,7 @@ for (var i = 0; i < top3_icons.length; i++) {
             cont_sli.classList.remove('gradient-border-as');
             cont_sli.setAttribute('style', 'overflow-y:hidden');
         }, 3500);
+        dosecs2();
     });
 }
 
@@ -161,17 +141,17 @@ function dis_cards(cate) {
     let scat, sic;
     switch (cate) {
         case 1:
-            extra = catv[cate - 1] - ctlen;
+            extra = (catv[cate - 1]) / 2 - ctlen;
             scat = cat1;
             sic = 'img/gifs/csun.gif';
             break;
         case 2:
-            extra = catv[cate - 1] - ctlen;
+            extra = (catv[cate - 1]) / 2 - ctlen;
             scat = cat2;
             sic = 'img/gifs/csnow.gif'
             break;
         case 3:
-            extra = catv[cate - 1] - ctlen;
+            extra = (catv[cate - 1]) / 2 - ctlen;
             scat = cat3;
             sic = 'img/gifs/crain.gif'
             break;
@@ -192,18 +172,18 @@ function dis_cards(cate) {
             //console.log(i);
         }
     }
-    console.log('CT', ctcls.length);
+    console.log('CT', ctcls.length, scat);
     card_edit(ctcls.length, scat, sic);
 }
 
 function card_edit(ctlen, scat, sic) {
+    console.log(scat[0]['cityName']);
     var ctt = document.getElementsByClassName('ctt');
     var cic = cont_sli.getElementsByClassName('temcic');
     var cnt = cont_sli.getElementsByClassName('ct-cnt');
     var ctim = cont_sli.getElementsByClassName('top-ctimg');
     console.log(scat[0]['category']);
     for (var i = 0; i < ctlen; i++) {
-
         ctt[i].childNodes[1].innerHTML = scat[i]['cityName'];
         var xtem = scat[i]['temperature'];
         ctt[i].childNodes[3].innerHTML = '<img class="card-icon temcic" src="" alt=""> ' + xtem;
@@ -226,19 +206,19 @@ function card_edit(ctlen, scat, sic) {
         }));
         dat = (dat.replace(',', '').split(' '));
         cnt[i].childNodes[3].innerHTML = dat[1] + '-' + dat[0] + '-' + dat[2];
-        cnt[i].childNodes[5].innerHTML = '<img class="card-icon humcic" src="/img/weather_icons/humidityIcon.svg" alt=""> ' + scat[i]['humidity'];
-        cnt[i].childNodes[7].innerHTML = '<img class="card-icon precic" src="/img/weather_icons/precipitationIcon.svg" alt=""> ' + scat[i]['precipitation'];
+        cnt[i].childNodes[5].innerHTML = '<img class="card-icon humcic" alt=""> ' + scat[i]['humidity'];
+        cnt[i].childNodes[7].innerHTML = '<img class="card-icon precic" alt=""> ' + scat[i]['precipitation'];
 
         var wnum = document.getElementById('wtop-num');
         if (scat[0]['category'] === 2) {
-            console.log('height');
+            //console.log('height');
             cic[i].setAttribute('style', 'height: 1em');
             wnum.value = 3;
             wnum.disabled = true;
         } else if (scat[0]['category'] === 1) {
             wnum.value = 4;
             wnum.disabled = false;
-            wnum.max = 4;
+            wnum.max = catv[0] / 2;
         } else if (scat[0]['category'] === 3) {
             wnum.value = 4;
             wnum.disabled = false;
@@ -294,7 +274,6 @@ $('#wtop-num').change(function (e) {
     }
     for (i = vi; i < ctcls.length; i++) {
         ctcls[i].style.display = 'none';
-        console.log(i);
     }
     checkflow(cont_sli);
 });
@@ -345,20 +324,24 @@ $('#r2ini').mouseenter(function (e) {
     tcty.classList.remove('headline', 'headline--fall');
 });
 
-setInterval(function () {
-    var ctt = document.getElementsByClassName('ctt');
-    var cic = cont_sli.getElementsByClassName('temcic');
-    var cnt = cont_sli.getElementsByClassName('ct-cnt');
+function dosecs2() {
+    console.log(my_json);
+    setInterval(function () {
+        var ctt = document.getElementsByClassName('ctt');
+        var cic = cont_sli.getElementsByClassName('temcic');
+        var cnt = cont_sli.getElementsByClassName('ct-cnt');
 
-    for (var i = 0; i < ctcls.length; i++) {
-        var cname = (ctt[i].childNodes[1].innerHTML).toLowerCase();
-        var tzone = my_json[cname]['timeZone'];
-        cnt[i].childNodes[1].innerHTML = (new Date().toLocaleString("en-US", {
-            timeZone: "" + tzone,
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        }));
-    }
+        for (var i = 0; i < ctcls.length / 2; i++) {
+            var cname = (ctt[i].childNodes[1].innerHTML).toLowerCase();
+            //console.log(cname);
+            var tzone = my_json[cname]['timeZone'];
+            cnt[i].childNodes[1].innerHTML = (new Date().toLocaleString("en-US", {
+                timeZone: "" + tzone,
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            }));
+        }
 
-}, 1000);
+    }, 30000);
+}

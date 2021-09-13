@@ -61,16 +61,16 @@
     background: black;
     padding-bottom: 10px;
     cursor: pointer;
-}
-
-#contin, #contit {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -moz-osx-font-smoothing: grayscale;
-
     overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #contin:before {

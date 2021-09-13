@@ -1,28 +1,134 @@
 let drpdown = $('#city-selecter');
+drpdown.empty();
+const url = '/js/data.json';
 
-//drpdown.empty();
-//drpdown.prop('selectedIndex', 0);
+let tmjson = {};
+initselct();
 
-const url = 'js/data.json';
+function initselct() {
+    const remurl = 'https://soliton.glitch.me/all-timezone-cities';
+    const options = {method: 'GET'};
+    var j = 1;
+    fetch(remurl, options)
+        .then(async (res) => {
+            res = (await res.text());
+            var resp = JSON.parse(res)
+            resp = keychng(resp);
+            for (var i in resp) {
+                console.log(i);
+                var idd = String('#cop' + j);
+                drpdown.append($('<a></a>').attr({
+                    'value': resp[i]['cityName'],
+                    'class': 'dloptions',
+                    'id': idd
+                }).text(resp[i]['cityName']));
+                j++;
+            }
+        })
+        .catch((err) => console.error(err));
+}
 
+/*
 // Populate dropdown with list of Cities
 $.getJSON(url, function (data) {
     let i = 1;
     $.each(data, function (key, entry) {
         var idd = String('#cop' + i);
-        drpdown.append($('<a onclick="e.preventDefault();return false;"></a>').attr({
-            'value': entry.cityName,
+        drpdown.append($('<a></a>').attr({
+            'value': entry['cityName'],
             'class': 'dloptions',
             'id': idd
-        }).text(entry.cityName));
+        }).text(entry['cityName']));
         i++;
     })
-});
+})
+    .done(function () {
+        alert('getJSON request succeeded!');
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        alert('getJSON request failed! ' + textStatus);
+    })
+*/
+
+jsonupdate();
+var json_data, tjs;
+
+function jsonupdate() {
+    citygen();
+
+    $.getJSON(url, 'data', function (data) {
+        json_data = data;
+        for (var i in data) {
+            citytime(data[i]['cityName']);
+        }
+    });
+    setTimeout(function () {
+        for (var i in json_data) {
+            json_data[i] = tjs[i];
+            json_data[i]['nextFiveHrs'] = tmjson[i];
+        }
+        console.log(json_data);
+    }, 4000);
+}
+
+function citygen() {
+    const remurl = 'https://soliton.glitch.me/all-timezone-cities';
+    const options = {method: 'GET'};
+    fetch(remurl, options)
+        .then(async (res) => {
+            res = (await res.text());
+            var resp = JSON.parse(res)
+            tjs = keychng(resp);
+            console.log(tjs);
+        })
+        .catch((err) => console.error(err));
+}
+
+function citytime(cname) {
+    var options = {
+        method: 'GET',
+        redirect: 'follow',
+    };
+    let url = `https://soliton.glitch.me?city=${cname}`;
+    fetch(url, options)
+        .then((res) => res.text())
+        .then((res) => {
+            city5hrs(JSON.parse(res), cname)
+        })
+        .catch((error) => console.log('error', error));
+}
+
+function city5hrs(jsob, cname) {
+    var myHeaders = new Headers({'Content-Type': 'application/json'});
+    var raw = JSON.stringify({...jsob, hours: 5});
+    var options = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+    };
+
+    fetch('https://soliton.glitch.me/hourly-forecast', options)
+        .then(async (response) => response.text())
+        .then((res) => {
+            tmjson[cname.toLowerCase()] = JSON.parse(res)['temperature'];
+        })
+        .catch((error) => console.log('error', error));
+}
+
+function keychng(json) {
+    Object.keys(json).forEach(function (key) {
+        var cnm = (json[key]['cityName']).toLowerCase();
+        json[cnm] = json[key];
+        //console.log(json[key],key,cnm);
+        delete json[key];
+    });
+    //console.log(json);
+    return json;
+}
+
 let ulpar = document.getElementById('city-selecter');
 let litems = ulpar.getElementsByClassName("dloptions");
-
-
-let flg_ct_select = 0;
 let city_select = document.getElementById("filterer");
 let city_txt = document.getElementById("city-icon");
 
@@ -40,22 +146,21 @@ city_select.onchange = function onctChange() {
 /**
  * @desc Getting current time
  * @param {String} tt
- * @return {Void} noresponse
+ * @return {void} noresponse
  */
+var proto;
+
 function curtime(tt) {
-    $.getJSON(url, function (data) {
-        //console.log(data);
-        let proto;
-        for (var i in data) {
-            if (tt.toLowerCase() == i) {
-                var tcity = data[i];
-                row1_update(tcity, i);
-                proto = new protocall(tcity, i);
-                proto.row1_5hrs();
-                overlay_upd(tcity);
-            }
+
+    for (var i in json_data) {
+        if (tt.toLowerCase() === i) {
+            var tcity = json_data[i];
+            row1_update(tcity, i);
+            proto = new protocall(tcity, i);
+            proto.row1_5hrs();
+            overlay_upd(tcity);
         }
-    });
+    }
 }
 
 /**
@@ -123,19 +228,16 @@ class myproto {
     row1_5hrs() {
         let hr_tem = document.getElementsByClassName('wc-number');
         let tem_dt = this.tem_dt;
-        //console.log(tem_dt);
+        console.log(tem_dt);
         var temp = this.temp;
         hr_tem[0].innerHTML = temp[0] + temp[1].sup() + "🌡️";
         var tavg = 0;
-        for (var i = 1; i < hr_tem.length - 1; i++) {
-            temp = tem_dt[i - 1].split(' ');
+        for (var i = 1; i < hr_tem.length; i++) {
+            temp = tem_dt[i - 1].replace('°C', ' °C').split(' ');
             hr_tem[i].innerHTML = temp[0] + temp[1].sup() + "🌡️";
             tavg += Number(temp[0]);
         }
-        hr_tem[5].innerHTML = Math.round(tavg / 4) + temp[1].sup() + "🌡️";
 
-        //var tzone = this.tzone;
-        //let cur_time_dt = this.cur_time_dt;
         var full_date = this.full_date;
         full_date.getHours();
         let temphr = this.temphr;
@@ -195,8 +297,8 @@ class myproto {
 class protocall extends myproto {
     constructor(tcity, i) {
         super();
-        this.tem_dt = tcity['nextFiveHrs'];
-        this.temp = tcity['temperature'].split(' ');
+        this.tem_dt = json_data[i]['nextFiveHrs'];
+        this.temp = (tcity['temperature']).replace('°C', ' °C').split(' ');
         this.tzone = tcity['timeZone'];
         this.cur_time_dt = (new Date().toLocaleString("en-US", {timeZone: "" + this.tzone}));
         this.full_date = new Date(this.cur_time_dt);
@@ -226,7 +328,7 @@ function remborder(ele) {
             tm_tem[i].classList.remove('border', 'border-3', 'rounded-3', 'bdrbg');
         } else {
             txy = hr_tem[i].innerHTML;
-            //console.log(txy);
+            console.log(txy);
         }
     }
     return txy;
@@ -237,7 +339,7 @@ function overlay_upd(tcity) {
 
     for (var i = 0; i < tm_tem.length; i++) {
         tm_tem[i].addEventListener('mousedown', function (e) {
-            //console.log(e.target);
+            console.log(e.target);
             e.target.classList.add('border', 'border-3', 'rounded-3', 'bdrbg');
             txy = remborder(e.target);
             bg_overlay(txy.replace("<sup>°C</sup>🌡️", ''));
@@ -249,9 +351,15 @@ function overlay_upd(tcity) {
 }
 
 function bg_overlay(txy) {
-    txy = Number(txy.replace(' °C', ''));
-    //console.log(txy);
+    console.log(txy);
+    txy = (txy.replace(' °C', ''));
+    txy = Number(txy.replace('°C', ''));
+    console.log(txy);
     switch (true) {
+        case txy === 666:
+            ovly_loop(txy);
+            document.getElementById('bg').removeAttribute('style');
+            break;
         case txy >= 23 && txy <= 29:
             ovly_loop(0);
             document.getElementById('bg').setAttribute('style', 'filter: opacity(50%) blur(5px) saturate(3) contrast(180%) brightness(120%);');
@@ -326,7 +434,7 @@ function initiator() {
         hr_tem[i].style.fontSize = "x-large";
     }
     document.getElementById('searchal').style.display = 'none';
-    bg_overlay('24 °C');
+    bg_overlay('666°C');
     document.getElementById('bg').removeAttribute('style');
 }
 
