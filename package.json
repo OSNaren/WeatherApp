@@ -1,0 +1,21 @@
+{
+  "name": "osnaren_webtips",
+  "version": "1.0.0",
+  "description": "WeatherApp",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "weather app",
+    "webtips"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "^3.0.0",
+    "node-static": "^0.7.11",
+    "nodemon": "^2.0.12"
+  }
+}
