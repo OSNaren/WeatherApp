@@ -416,7 +416,6 @@ function bg_overlay(txy) {
         case txy <= 10:
             ovly_loop(4);
             document.getElementById('bg').setAttribute('style', 'filter: brightness(150%) saturate(3) blur(1px);');
-            document.getElementById('athunder').play();
             break;
     }
 }

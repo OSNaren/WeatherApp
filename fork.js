@@ -2,12 +2,13 @@ const tz = require('weather-tzone');
 const querystring = require("querystring");
 console.log(tz);
 
+//Return Next 5 hours
 const get5val = (cobj) => {
     let atz = tz.allTimeZones();
     return tz.nextNhoursWeather(cobj, 5, atz);
 };
 
-
+//Redirect and Return results for Child Processes
 process.on('message', (message) => {
     if (message === 'all-timezone-cities') {
         var dt = tz.allTimeZones();
