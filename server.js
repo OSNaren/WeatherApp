@@ -50,7 +50,7 @@ app.post('/hourly-forecast', (request, response) => {
 
 //Serve Static Files
 app.use(express.static('assets'));
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
     console.log('Node Server running', port)
     console.log(__dirname);
     console.log(('http://localhost:' + port))
