@@ -19,10 +19,15 @@ _WEBTIPS Assignment_  —  **A fully responsive website that collects and displa
 
 
 - **T1001** – Weather Information for selected city 
+
 ![Top Section](https://github.com/OSNaren/WeatherApp/blob/main/assets/img/SS1.png?raw=true)
+
 - **T1002** – Weather condition for all listed cities 
+
 ![Middle Section](https://github.com/OSNaren/WeatherApp/blob/main/assets/img/SS2.png?raw=true)
+
 - **T1003** – Show continent-wise weather condition of cities
+
 ![Bottom Section](https://github.com/OSNaren/WeatherApp/blob/main/assets/img/SS3.png?raw=true)
 
   
