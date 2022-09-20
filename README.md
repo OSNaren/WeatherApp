@@ -40,7 +40,7 @@ _WEBTIPS Assignment_  —  **A fully responsive website that collects and displa
 [js-shield]: https://img.shields.io/badge/WeatherAPP-grey?style=for-the-badge&logo=javascript
 [js-url]: https://osnaren.github.io/WeatherApp
 [node-shield]: https://img.shields.io/badge/WeatherAPP-grey?style=for-the-badge&logo=node.js
-[node-url]: https://deluxe-fuchsia-talon.glitch.me/
+[node-url]: https://weather-app-os.glitch.me/
 
 
 ### IDE & Tools
